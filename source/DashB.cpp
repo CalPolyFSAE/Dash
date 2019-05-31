@@ -42,6 +42,8 @@
 #include "gpio.h"
 #include "WarningLEDs.h"
 #include "Gears.h"
+#include "CAN.h"
+#include "LCD.h"
 
 using namespace BSP;
 /* TODO: insert other include files here. */
@@ -52,7 +54,9 @@ using namespace BSP;
  * @brief   Application entry point.
  */
 int main(void) {
-  	int i =0;
+
+
+	int i =0;
   	int gear =1;
 	/* Init board hardware. */
     BOARD_InitBootPins();
@@ -62,42 +66,20 @@ int main(void) {
 	BOARD_InitDebugConsole();
 	initLEDs();
 	initGears();
-	/*gpio::GPIO::ConstructStatic();
-	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.set(gpio::PortD,15);
-	gpio.clear(gpio::PortD,16);
-	gpio.set(gpio::PortD,2);*/
-    /* Enter an infinite loop, just incrementing a counter. */
-
-	SysTick_Config(0xfffff0);
+	/*LCDinit();*/
+	setupCAN();
+	/*bothSides(65);*/
+	read();
+	//SysTick_Config(0xfffff0);
 	//_____________TEST GEARS_____________
-	while(1) {
-		while (i<1000000) {
-			++i;
-		}
-		shift(++gear);
-		if (gear >= 6){
-			gear = 0;
-		}
-		i=0;
-	}
-//	while(1) {
-//		toggleLED1();
-//		toggleLED2();
-//		toggleLED3();
-//		toggleLED4();
-    	/*gpio.toggle(gpio::PortD,15);
-    	gpio.toggle(gpio::PortD,16);
-    	gpio.toggle(gpio::PortD,2);*/
-    	//i=0;
-//    }
+	while(1) {}
     return 0 ;
 }
-extern "C" {
+/*extern "C" {
 void SysTick_Handler(){
 	toggleLED1();
 	toggleLED2();
 	toggleLED3();
 	toggleLED4();
 }
-}
+}*/

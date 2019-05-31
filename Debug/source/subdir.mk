@@ -4,22 +4,28 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../source/CAN.cpp \
 ../source/DashB.cpp \
 ../source/Gears.cpp \
+../source/LCD.cpp \
 ../source/WarningLEDs.cpp 
 
 C_SRCS += \
 ../source/semihost_hardfault.c 
 
 OBJS += \
+./source/CAN.o \
 ./source/DashB.o \
 ./source/Gears.o \
+./source/LCD.o \
 ./source/WarningLEDs.o \
 ./source/semihost_hardfault.o 
 
 CPP_DEPS += \
+./source/CAN.d \
 ./source/DashB.d \
 ./source/Gears.d \
+./source/LCD.d \
 ./source/WarningLEDs.d 
 
 C_DEPS += \

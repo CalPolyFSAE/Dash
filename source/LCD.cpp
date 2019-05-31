@@ -5,49 +5,399 @@
  *      Author: mugetronblue
  */
 #include "gpio.h"
+#include "LCD.h"
+
+volatile int counter = 0;
 
 using namespace BSP;
-void initLCD() {
+void delay(int i)
+{
+	counter = i * 10;
+	SysTick_Config(counter);
+}
+
+void LCDinit()
+{
 	gpio::GPIO::ConstructStatic();
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	/* Set CL to clock with a 2kHz external clock signal.
-	 * Register select signal. A0=0: Command, A0=1: Data
-	 * choose between command and data.
-	 * Active LOW Chip Select Signal for LEFT half of LCD
-	 * Active LOW Chip Select Signal for RIGHT half of LCD
-	 * So to turn them on, we should clear them.
-	 * RESET -> Hardware RESET (edge-sensitive) and
-	 * interface type selection: Positive
-	 * Reset: 8080 mode
-	 * Negative Reset: 6800 mode
-	 * R/W -> 6800 Mode: Read/Write select signal.
-	 * R/W=1: Read R/W: =0:
-	 * Write 8080 Mode: Active LOW Write Signal
-	 * EN-> 6800 Mode: Active HIGH Enable Signal
-	 * 8080 Mode: Active LOW Read Signal
-	 * D0-D7 are the 8 bit bidirectional data bus.
-	 *
-	 */
-	//___Other pins____
-	//gpio.clear(gpio::PortD,2) ; //CL = clock signal
-	gpio.clear(gpio::PortE,10); //RS? A0
-	gpio.clear(gpio::PortE,11); //CS2
-	gpio.clear(gpio::PortD,0) ; //CS1
-	gpio.clear(gpio::PortD,1) ; //RESET/IF
-	gpio.clear(gpio::PortC,5) ; //EN? I think E/RD
-	gpio.clear(gpio::PortE,0) ; //R/W
+	gpio.clear(gpio::DATA0_PORT,DATA0_PIN);
+	gpio.clear(gpio::DATA1_PORT,DATA1_PIN);
+	gpio.clear(gpio::DATA2_PORT,DATA2_PIN);
+	gpio.clear(gpio::DATA3_PORT,DATA3_PIN);
+	gpio.clear(gpio::DATA4_PORT,DATA4_PIN);
+	gpio.clear(gpio::DATA5_PORT,DATA5_PIN);
+	gpio.clear(gpio::DATA6_PORT,DATA6_PIN);
+	gpio.clear(gpio::DATA7_PORT,DATA7_PIN);
+	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.clear(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.clear(gpio::RST_PORT,RST_PIN);
+	delay(1);
+	gpio.set(gpio::RST_PORT,RST_PIN);
+	delay(10);
+	gpio.clear(gpio::RS_PORT,RS_PIN);
+	gpio.set(gpio::EN_PORT,EN_PIN);
+	gpio.set(gpio::RW_PORT, RW_PIN );
 
-	//____DATA pins____
-	gpio.clear(gpio::PortE,1) ; //D0
-	gpio.clear(gpio::PortA,11); //D1
-	gpio.clear(gpio::PortA,12); //D2
-	gpio.clear(gpio::PortA,13); //D3
-	gpio.clear(gpio::PortE,2) ; //D4
-	gpio.clear(gpio::PortE,6) ; //D5
-	gpio.clear(gpio::PortC,6) ; //D6
-	gpio.clear(gpio::PortC,7) ; //D7
+	bothSides(0xE2);
+	delay(10);
+	bothSides(0xA4);
+	bothSides(0xA9);
+	bothSides(0xA0);
+	bothSides(0xEE);
+	bothSides(0xC0);
+	bothSides(0xAF);
 
 }
 
+void writeLeft(char i)
+{
+	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
+	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
+	//iterates through bits of i and sets them to data pins
+	if (i & 0x01)
+	{
+		gpio.set(gpio::DATA0_PORT,DATA0_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA0_PORT,DATA0_PIN);
+	}
+	if (i & 0x02)
+	{
+		gpio.set(gpio::DATA1_PORT,DATA1_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA1_PORT,DATA1_PIN);
+	}
+	if (i & 0x04)
+	{
+		gpio.set(gpio::DATA2_PORT,DATA2_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA2_PORT,DATA2_PIN);
+	}
+	if (i & 0x08)
+	{
+		gpio.set(gpio::DATA3_PORT,DATA3_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA3_PORT,DATA3_PIN);
+	}
+	if (i & 0x10)
+	{
+		gpio.set(gpio::DATA4_PORT,DATA4_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA4_PORT,DATA4_PIN);
+	}
+	if (i & 0x20)
+	{
+		gpio.set(gpio::DATA5_PORT,DATA5_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA5_PORT,DATA5_PIN);
+	}
+	if (i & 0x40)
+	{
+		gpio.set(gpio::DATA6_PORT,DATA6_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA6_PORT,DATA6_PIN);
+	}
+	if (i & 0x80)
+	{
+		gpio.set(gpio::DATA7_PORT,DATA7_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA7_PORT,DATA7_PIN);
+	}
 
+	gpio.clear(gpio::RW_PORT, RW_PIN );
+	gpio.set(gpio::RS_PORT,RS_PIN);
+	gpio.set(gpio::EN_PORT,EN_PIN);
+	delay(2);
+	gpio.clear(gpio::EN_PORT,EN_PIN);
+	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
+}
 
+void writeRight(char i)
+{
+	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
+	gpio.clear(gpio::CS_R_PORT,CS_R_PIN);
+	//iterates through bits of i and sets them to data pins
+	if (i & 0x01)
+	{
+		gpio.set(gpio::DATA0_PORT,DATA0_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA0_PORT,DATA0_PIN);
+	}
+	if (i & 0x02)
+	{
+		gpio.set(gpio::DATA1_PORT,DATA1_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA1_PORT,DATA1_PIN);
+	}
+	if (i & 0x04)
+	{
+		gpio.set(gpio::DATA2_PORT,DATA2_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA2_PORT,DATA2_PIN);
+	}
+	if (i & 0x08)
+	{
+		gpio.set(gpio::DATA3_PORT,DATA3_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA3_PORT,DATA3_PIN);
+	}
+	if (i & 0x10)
+	{
+		gpio.set(gpio::DATA4_PORT,DATA4_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA4_PORT,DATA4_PIN);
+	}
+	if (i & 0x20)
+	{
+		gpio.set(gpio::DATA5_PORT,DATA5_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA5_PORT,DATA5_PIN);
+	}
+	if (i & 0x40)
+	{
+		gpio.set(gpio::DATA6_PORT,DATA6_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA6_PORT,DATA6_PIN);
+	}
+	if (i & 0x80)
+	{
+		gpio.set(gpio::DATA7_PORT,DATA7_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA7_PORT,DATA7_PIN);
+	}
+
+	gpio.clear(gpio::RW_PORT, RW_PIN );
+	gpio.set(gpio::RS_PORT,RS_PIN);
+	gpio.set(gpio::EN_PORT,EN_PIN);
+	delay(2); //needs a delay function
+	gpio.clear(gpio::EN_PORT,EN_PIN);
+	gpio.set(gpio::CS_R_PORT,CS_R_PIN);
+}
+
+void comLeft(char i)
+{
+	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
+	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
+	//iterates through bits of i and sets them to data pins
+	if (i & 0x01)
+	{
+		gpio.set(gpio::DATA0_PORT,DATA0_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA0_PORT,DATA0_PIN);
+	}
+	if (i & 0x02)
+	{
+		gpio.set(gpio::DATA1_PORT,DATA1_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA1_PORT,DATA1_PIN);
+	}
+	if (i & 0x04)
+	{
+		gpio.set(gpio::DATA2_PORT,DATA2_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA2_PORT,DATA2_PIN);
+	}
+	if (i & 0x08)
+	{
+		gpio.set(gpio::DATA3_PORT,DATA3_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA3_PORT,DATA3_PIN);
+	}
+	if (i & 0x10)
+	{
+		gpio.set(gpio::DATA4_PORT,DATA4_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA4_PORT,DATA4_PIN);
+	}
+	if (i & 0x20)
+	{
+		gpio.set(gpio::DATA5_PORT,DATA5_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA5_PORT,DATA5_PIN);
+	}
+	if (i & 0x40)
+	{
+		gpio.set(gpio::DATA6_PORT,DATA6_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA6_PORT,DATA6_PIN);
+	}
+	if (i & 0x80)
+	{
+		gpio.set(gpio::DATA7_PORT,DATA7_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA7_PORT,DATA7_PIN);
+	}
+
+	gpio.clear(gpio::RW_PORT, RW_PIN );
+	gpio.clear(gpio::RS_PORT,RS_PIN);
+	gpio.set(gpio::EN_PORT,EN_PIN);
+	delay(2); //needs a delay function
+	gpio.clear(gpio::EN_PORT,EN_PIN);
+	gpio.set(gpio::CS_L_PORT,CS_L_PIN);
+}
+
+void comRight(char i)
+{
+	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
+	gpio.clear(gpio::CS_R_PORT,CS_R_PIN);
+	//iterates through bits of i and sets them to data pins
+	if (i & 0x01)
+	{
+		gpio.set(gpio::DATA0_PORT,DATA0_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA0_PORT,DATA0_PIN);
+	}
+	if (i & 0x02)
+	{
+		gpio.set(gpio::DATA1_PORT,DATA1_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA1_PORT,DATA1_PIN);
+	}
+	if (i & 0x04)
+	{
+		gpio.set(gpio::DATA2_PORT,DATA2_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA2_PORT,DATA2_PIN);
+	}
+	if (i & 0x08)
+	{
+		gpio.set(gpio::DATA3_PORT,DATA3_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA3_PORT,DATA3_PIN);
+	}
+	if (i & 0x10)
+	{
+		gpio.set(gpio::DATA4_PORT,DATA4_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA4_PORT,DATA4_PIN);
+	}
+	if (i & 0x20)
+	{
+		gpio.set(gpio::DATA5_PORT,DATA5_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA5_PORT,DATA5_PIN);
+	}
+	if (i & 0x40)
+	{
+		gpio.set(gpio::DATA6_PORT,DATA6_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA6_PORT,DATA6_PIN);
+	}
+	if (i & 0x80)
+	{
+		gpio.set(gpio::DATA7_PORT,DATA7_PIN);
+	}
+	else
+	{
+		gpio.clear(gpio::DATA7_PORT,DATA7_PIN);
+	}
+
+	gpio.clear(gpio::RW_PORT, RW_PIN );
+	gpio.clear(gpio::RS_PORT,RS_PIN);
+	gpio.set(gpio::EN_PORT,EN_PIN);
+	delay(2); //needs a delay function
+	gpio.clear(gpio::EN_PORT,EN_PIN);
+	gpio.set(gpio::CS_R_PORT,CS_R_PIN);
+}
+
+void bothSides(char i)
+{
+	comLeft(i);
+	comRight(i);
+}
+
+void writeBothSides(char i)
+{
+	writeLeft(i);
+	writeRight(i);
+}
+
+void LCDcommand(char str)
+{
+
+}
+
+void LCDchar(char str)
+{
+	writeBothSides(str);
+}
+
+void LCDwrite(char* str)
+{
+	int i=0;
+	while(str[i] != '\0')
+	{
+		LCDchar(str[i]);
+		i++;
+	}
+}
+
+extern "C" {
+void SysTick_Handler(){
+	while(counter)
+	{
+		counter--;
+	}
+}
+}

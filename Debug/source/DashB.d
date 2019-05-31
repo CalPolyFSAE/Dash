@@ -11,7 +11,7 @@ source/DashB.o source/DashB.d: ../source/DashB.cpp ../board/board.h \
  /Users/mugetronblue/Documents/MKELibrary/lib/gpio.h \
  /Users/mugetronblue/Documents/MKELibrary/System/Service.h \
  ../drivers/fsl_gpio.h ../drivers/fsl_port.h ../source/WarningLEDs.h \
- ../source/Gears.h
+ ../source/Gears.h ../source/CAN.h ../source/LCD.h
 
 ../board/board.h:
 
@@ -62,3 +62,7 @@ source/DashB.o source/DashB.d: ../source/DashB.cpp ../board/board.h \
 ../source/WarningLEDs.h:
 
 ../source/Gears.h:
+
+../source/CAN.h:
+
+../source/LCD.h:

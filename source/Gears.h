@@ -11,7 +11,4 @@
 void initGears();
 void shift(int gear);
 
-
-
-
 #endif /* GEARS_H_ */
