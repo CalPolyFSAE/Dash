@@ -6,7 +6,7 @@
  * Generated linker script file for MKE18F512xxx16
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v10.3.0 [Build 2200] [2018-12-03] on May 30, 2019 9:56:32 PM
+ * MCUXpresso IDE v10.3.0 [Build 2200] [2018-12-03] on Jun 12, 2019 7:42:04 PM
  */
 
 INCLUDE "DashB_Debug_library.ld"

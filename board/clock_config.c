@@ -117,6 +117,7 @@ outputs:
 - {id: Flash_clock.outFreq, value: 12 MHz}
 - {id: LPO1KCLK.outFreq, value: 1 kHz}
 - {id: LPO_clock.outFreq, value: 128 kHz}
+- {id: PCC.PCC_LPIT0_CLK.outFreq, value: 30 MHz}
 - {id: PLLDIV1_CLK.outFreq, value: 180 MHz}
 - {id: PLLDIV2_CLK.outFreq, value: 90 MHz}
 - {id: SIRCDIV1_CLK.outFreq, value: 8 MHz}
@@ -124,6 +125,7 @@ outputs:
 - {id: SIRC_CLK.outFreq, value: 8 MHz}
 - {id: System_clock.outFreq, value: 60 MHz}
 settings:
+- {id: PCC.PCC_LPIT0_SEL.sel, value: SCG.FIRCDIV2_CLK}
 - {id: SCG.DIVSLOW.scale, value: '5', locked: true}
 - {id: SCG.FIRCDIV1.scale, value: '1', locked: true}
 - {id: SCG.FIRCDIV2.scale, value: '2', locked: true}
@@ -206,5 +208,7 @@ void BOARD_BootClockRUN(void)
     } while (curConfig.src != g_sysClkConfig_BOARD_BootClockRUN.src);
     /* Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
+    /* Set PCC LPIT0 selection */
+    CLOCK_SetIpSrc(kCLOCK_Lpit0, kCLOCK_IpSrcFircAsync);
 }
 

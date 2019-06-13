@@ -7,14 +7,10 @@
 #include "gpio.h"
 #include "LCD.h"
 
-volatile int counter = 0;
-
 using namespace BSP;
-void delay(int i)
-{
-	counter = i * 10;
-	SysTick_Config(counter);
-}
+
+extern void
+	delay(uint32_t usec);
 
 void LCDinit()
 {
@@ -31,28 +27,28 @@ void LCDinit()
 	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
 	gpio.clear(gpio::CS_R_PORT,CS_R_PIN);
 	gpio.clear(gpio::RST_PORT,RST_PIN);
-	delay(1);
+	delay(2);
 	gpio.set(gpio::RST_PORT,RST_PIN);
 	delay(10);
 	gpio.clear(gpio::RS_PORT,RS_PIN);
 	gpio.set(gpio::EN_PORT,EN_PIN);
-	gpio.set(gpio::RW_PORT, RW_PIN );
+	gpio.set(gpio::RW_PORT, RW_PIN);
 
 	bothSides(0xE2);
-	delay(10);
+	/*delay(10);
 	bothSides(0xA4);
 	bothSides(0xA9);
 	bothSides(0xA0);
 	bothSides(0xEE);
 	bothSides(0xC0);
 	bothSides(0xAF);
-
+	*/
 }
 
 void writeLeft(char i)
 {
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.toggle(gpio::CS_L_PORT,CS_L_PIN);
 	//iterates through bits of i and sets them to data pins
 	if (i & 0x01)
 	{
@@ -124,13 +120,13 @@ void writeLeft(char i)
 	gpio.set(gpio::EN_PORT,EN_PIN);
 	delay(2);
 	gpio.clear(gpio::EN_PORT,EN_PIN);
-	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.toggle(gpio::CS_L_PORT,CS_L_PIN);
 }
 
 void writeRight(char i)
 {
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.clear(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.toggle(gpio::CS_R_PORT,CS_R_PIN);
 	//iterates through bits of i and sets them to data pins
 	if (i & 0x01)
 	{
@@ -196,19 +192,18 @@ void writeRight(char i)
 	{
 		gpio.clear(gpio::DATA7_PORT,DATA7_PIN);
 	}
-
 	gpio.clear(gpio::RW_PORT, RW_PIN );
 	gpio.set(gpio::RS_PORT,RS_PIN);
 	gpio.set(gpio::EN_PORT,EN_PIN);
 	delay(2); //needs a delay function
 	gpio.clear(gpio::EN_PORT,EN_PIN);
-	gpio.set(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.toggle(gpio::CS_R_PORT,CS_R_PIN);
 }
 
 void comLeft(char i)
 {
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.toggle(gpio::CS_L_PORT,CS_L_PIN);
 	//iterates through bits of i and sets them to data pins
 	if (i & 0x01)
 	{
@@ -280,13 +275,13 @@ void comLeft(char i)
 	gpio.set(gpio::EN_PORT,EN_PIN);
 	delay(2); //needs a delay function
 	gpio.clear(gpio::EN_PORT,EN_PIN);
-	gpio.set(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.toggle(gpio::CS_L_PORT,CS_L_PIN);
 }
 
 void comRight(char i)
 {
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.clear(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.toggle(gpio::CS_R_PORT,CS_R_PIN);
 	//iterates through bits of i and sets them to data pins
 	if (i & 0x01)
 	{
@@ -358,7 +353,7 @@ void comRight(char i)
 	gpio.set(gpio::EN_PORT,EN_PIN);
 	delay(2); //needs a delay function
 	gpio.clear(gpio::EN_PORT,EN_PIN);
-	gpio.set(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.toggle(gpio::CS_R_PORT,CS_R_PIN);
 }
 
 void bothSides(char i)
@@ -378,9 +373,9 @@ void LCDcommand(char str)
 
 }
 
-void LCDchar(char str)
+void LCDchar(char chr)
 {
-	writeBothSides(str);
+	writeBothSides(chr);
 }
 
 void LCDwrite(char* str)
@@ -393,11 +388,8 @@ void LCDwrite(char* str)
 	}
 }
 
-extern "C" {
+/*extern "C" {
 void SysTick_Handler(){
-	while(counter)
-	{
-		counter--;
-	}
+	blocked = 0;
 }
-}
+}*/

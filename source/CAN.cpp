@@ -11,7 +11,7 @@
 using namespace BSP;
 
 uint8_t buffer[8];
-volatile uint8_t id;
+volatile uint32_t id;
 
 void genCallBack()
 {
@@ -34,29 +34,28 @@ void setupCAN()
 	cx.callback = genCallBack;
 	can.init(0, &cx);
 }
-/* gear indicators are at data 1 and warning leds are at data 0*/
-/* 400 for c car and 401 for e car*/
+
 void toggleWarningLeds(uint8_t data)
 {
-	if (data  & 1) {
+	if (data  & 0x1) {
 		setLED1();
 	}
 	else {
 		clearLED1();
 	}
-	if (data & 2) {
+	if (data & 0x2) {
 		setLED2();
 	}
 	else {
 		clearLED2();
 	}
-	if (data & 4) {
+	if (data & 0x4) {
 		setLED3();
 	}
 	else {
 		clearLED3();
 	}
-	if (data & 8) {
+	if (data & 0x8) {
 		setLED4();
 	}
 	else {
@@ -73,6 +72,8 @@ void toggleWarningLeds(uint8_t data)
 
 /* buttons are for lap timer and DRS? maybe? or other one will be a flag*/
 
+/* gear indicators are at data 1 and warning leds are at data 0*/
+/* 400 for c car and 401 for e car*/
 void read()
 {
 	can::CANlight& can = can::CANlight::StaticClass();

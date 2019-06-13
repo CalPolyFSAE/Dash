@@ -34,6 +34,7 @@
  */
 #include <stdio.h>
 #include "board.h"
+#include "lpit.h"
 #include "peripherals.h"
 #include "pin_mux.h"
 #include "clock_config.h"
@@ -44,8 +45,64 @@
 #include "Gears.h"
 #include "CAN.h"
 #include "LCD.h"
+#include "fsl_lpit.h"
 
 using namespace BSP;
+
+/*extern "C" {
+	void LPIT0_Ch0_IRQHandler(void)
+	{
+		gpio::GPIO& gpio = gpio::GPIO::StaticClass();
+		gpio.toggle(gpio::PortD,2);
+	}
+}*/
+
+/*
+extern "C" {
+
+void LPIT0_Ch0_IRQHandler(){
+	/*debug toggle*//*
+	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
+	gpio.toggle(gpio::PortD,2);
+}
+
+void LPIT0_Ch1_IRQHandler(){
+
+}
+
+void LPIT0_Ch2_IRQHandler(){
+
+}
+
+void LPIT0_Ch3_IRQHandler(){
+
+}
+
+}
+
+
+void LPIT_Handler(void)
+{
+	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
+	gpio.toggle(gpio::PortD,2);
+}
+
+volatile uint32_t counter;
+
+void LPIT_DelayHandler(void)
+{
+	if (counter > 0)
+	{
+		counter--;
+	}
+}
+
+void delay(uint32_t usec)
+{
+	counter = usec;
+	while (counter != 0)
+		;
+}*/
 /* TODO: insert other include files here. */
 
 /* TODO: insert other definitions and declarations here. */
@@ -54,32 +111,53 @@ using namespace BSP;
  * @brief   Application entry point.
  */
 int main(void) {
-
-
-	int i =0;
-  	int gear =1;
+	int i = 0x0;
+	/*lpit_config_t LPIT_Config = {0};
+	lpit_chnl_params_t Channel = {0} ;
+	Channel.timerMode = kLPIT_PeriodicCounter;
+	Channel.triggerSelect = kLPIT_Trigger_TimerChn0;
+	Channel.triggerSource = kLPIT_TriggerSource_Internal;
+	Channel.enableReloadOnTrigger = true;*/
 	/* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
 	BOARD_InitDebugConsole();
+
+
+
+	/*LPIT_Init(LPIT0, &LPIT_Config);
+	LPIT_SetupChannel(LPIT0, kLPIT_Chnl_0, &Channel);
+	LPIT_SetTimerPeriod(LPIT0, kLPIT_Chnl_0, USEC_TO_COUNT(12500, 30000000));
+	LPIT_EnableInterrupts(LPIT0, kLPIT_Channel0TimerInterruptEnable);
+	EnableIRQ(LPIT0_Ch0_IRQn);
+	LPIT_StartTimer(LPIT0, kLPIT_Chnl_0);*/
+
+	gpio::GPIO::ConstructStatic();
+
+	/*lpit::lpit_config lpit_conf;
+	lpit_conf.clock = kCLOCK_IpSrcFircAsync;
+	lpit_conf.interrupts = 1;
+	lpit::LPIT::ConstructStatic(&lpit_conf);
+	lpit::LPIT& lpitc = lpit::LPIT::StaticClass();
+	lpitc.init(0, 7500, LPIT_Handler);
+	lpitc.init(1, 30, LPIT_DelayHandler);
+	*/
+
 	initLEDs();
 	initGears();
-	/*LCDinit();*/
+	LCDinit();
 	setupCAN();
-	/*bothSides(65);*/
+
+	/*while(1){
+		bothSides(i);
+		LCDchar(i);
+	}*/
+
 	read();
 	//SysTick_Config(0xfffff0);
 	//_____________TEST GEARS_____________
 	while(1) {}
     return 0 ;
 }
-/*extern "C" {
-void SysTick_Handler(){
-	toggleLED1();
-	toggleLED2();
-	toggleLED3();
-	toggleLED4();
-}
-}*/

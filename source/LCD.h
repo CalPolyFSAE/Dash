@@ -10,7 +10,7 @@
 
 //for datasheet, note we are using 6800 mode for the control signals.
 #define RS_PIN 10
-#define RS_PORT PortE
+#define RS_PORT PortD
 //RS=0 is command, RS=1 is data
 #define CS_L_PIN 0
 #define CS_L_PORT PortD
@@ -59,7 +59,6 @@ void Writeright(char i);
 void Comleft(char i);
 void Comright(char i);
 void bothSides(char i);
-
-
+void LCDchar(char chr);
 
 #endif

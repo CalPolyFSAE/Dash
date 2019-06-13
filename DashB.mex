@@ -61,7 +61,6 @@
                   <pin peripheral="GPIOD" signal="GPIO, 3" pin_num="45" pin_signal="ADC1_SE3/PTD3/FTM3_CH5/LPSPI1_PCS0/FXIO_D5/TRGMUX_IN4/NMI_b"/>
                   <pin peripheral="GPIOB" signal="GPIO, 13" pin_num="42" pin_signal="ADC1_SE8/ADC2_SE8/PTB13/FTM0_CH1/FTM3_FLT1"/>
                   <pin peripheral="GPIOB" signal="GPIO, 12" pin_num="43" pin_signal="ADC1_SE7/PTB12/FTM0_CH0/FTM3_FLT2"/>
-                  <pin peripheral="GPIOD" signal="GPIO, 2" pin_num="46" pin_signal="ADC1_SE2/PTD2/FTM3_CH4/LPSPI1_SOUT/FXIO_D4/TRGMUX_IN5"/>
                   <pin peripheral="GPIOE" signal="GPIO, 10" pin_num="4" pin_signal="ADC2_SE12/PTE10/CLKOUT/FTM2_CH4/FXIO_D4/TRGMUX_OUT4"/>
                   <pin peripheral="GPIOE" signal="GPIO, 11" pin_num="3" pin_signal="ADC2_SE13/PTE11/PWT_IN1/LPTMR0_ALT1/FTM2_CH5/FXIO_D5/TRGMUX_OUT5"/>
                   <pin peripheral="GPIOD" signal="GPIO, 0" pin_num="2" pin_signal="ADC2_SE0/PTD0/FTM0_CH2/LPSPI1_SCK/FTM2_CH0/FXIO_D0/TRGMUX_OUT1"/>
@@ -78,6 +77,7 @@
                   <pin peripheral="GPIOC" signal="GPIO, 7" pin_num="51" pin_signal="ADC1_SE5/PTC7/LPUART1_TX/CAN1_TX/FTM3_CH3"/>
                   <pin peripheral="CAN0" signal="TX" pin_num="5" pin_signal="PTE5/TCLK2/FTM2_QD_PHA/FTM2_CH3/CAN0_TX/FXIO_D7/EWM_IN"/>
                   <pin peripheral="CAN0" signal="RX" pin_num="6" pin_signal="PTE4/BUSOUT/FTM2_QD_PHB/FTM2_CH2/CAN0_RX/FXIO_D6/EWM_OUT_b"/>
+                  <pin peripheral="GPIOD" signal="GPIO, 2" pin_num="46" pin_signal="ADC1_SE2/PTD2/FTM3_CH4/LPSPI1_SOUT/FXIO_D4/TRGMUX_IN5"/>
                </pins>
             </function>
          </functions_list>
@@ -112,6 +112,7 @@
                   <clock_output id="Flash_clock.outFreq" value="12 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPO1KCLK.outFreq" value="1 kHz" locked="false" accuracy=""/>
                   <clock_output id="LPO_clock.outFreq" value="128 kHz" locked="false" accuracy=""/>
+                  <clock_output id="PCC.PCC_LPIT0_CLK.outFreq" value="30 MHz" locked="false" accuracy=""/>
                   <clock_output id="PLLDIV1_CLK.outFreq" value="180 MHz" locked="false" accuracy=""/>
                   <clock_output id="PLLDIV2_CLK.outFreq" value="90 MHz" locked="false" accuracy=""/>
                   <clock_output id="SIRCDIV1_CLK.outFreq" value="8 MHz" locked="false" accuracy=""/>
@@ -120,6 +121,7 @@
                   <clock_output id="System_clock.outFreq" value="60 MHz" locked="false" accuracy=""/>
                </clock_outputs>
                <clock_settings>
+                  <setting id="PCC.PCC_LPIT0_SEL.sel" value="SCG.FIRCDIV2_CLK" locked="false"/>
                   <setting id="SCG.DIVSLOW.scale" value="5" locked="true"/>
                   <setting id="SCG.FIRCDIV1.scale" value="1" locked="true"/>
                   <setting id="SCG.FIRCDIV2.scale" value="2" locked="true"/>
