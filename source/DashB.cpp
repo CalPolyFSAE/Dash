@@ -150,6 +150,13 @@ int main(void) {
 	LCDinit();
 	setupCAN();
 
+	delay(10);
+	bothSides('C');
+	delay(10);
+	bothSides('P');
+	delay(10);
+
+
 	/*while(1){
 		bothSides(i);
 		LCDchar(i);
