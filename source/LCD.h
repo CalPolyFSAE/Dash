@@ -10,7 +10,7 @@
 
 //for datasheet, note we are using 6800 mode for the control signals.
 #define RS_PIN 10
-#define RS_PORT PortD
+#define RS_PORT PortE
 //RS=0 is command, RS=1 is data
 #define CS_L_PIN 0
 #define CS_L_PORT PortD

@@ -35,20 +35,20 @@ void LCDinit()
 	gpio.set(gpio::RW_PORT, RW_PIN);
 
 	bothSides(0xE2);
-	/*delay(10);
+	delay(10);
 	bothSides(0xA4);
 	bothSides(0xA9);
 	bothSides(0xA0);
 	bothSides(0xEE);
 	bothSides(0xC0);
 	bothSides(0xAF);
-	*/
+	
 }
 
 void writeLeft(char i)
 {
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.toggle(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
 	//iterates through bits of i and sets them to data pins
 	if (i & 0x01)
 	{
@@ -120,13 +120,13 @@ void writeLeft(char i)
 	gpio.set(gpio::EN_PORT,EN_PIN);
 	delay(2);
 	gpio.clear(gpio::EN_PORT,EN_PIN);
-	gpio.toggle(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.set(gpio::CS_L_PORT,CS_L_PIN);
 }
 
 void writeRight(char i)
 {
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.toggle(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.clear(gpio::CS_R_PORT,CS_R_PIN);
 	//iterates through bits of i and sets them to data pins
 	if (i & 0x01)
 	{
@@ -197,13 +197,13 @@ void writeRight(char i)
 	gpio.set(gpio::EN_PORT,EN_PIN);
 	delay(2); //needs a delay function
 	gpio.clear(gpio::EN_PORT,EN_PIN);
-	gpio.toggle(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.set(gpio::CS_R_PORT,CS_R_PIN);
 }
 
 void comLeft(char i)
 {
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.toggle(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.clear(gpio::CS_L_PORT,CS_L_PIN);
 	//iterates through bits of i and sets them to data pins
 	if (i & 0x01)
 	{
@@ -275,13 +275,13 @@ void comLeft(char i)
 	gpio.set(gpio::EN_PORT,EN_PIN);
 	delay(2); //needs a delay function
 	gpio.clear(gpio::EN_PORT,EN_PIN);
-	gpio.toggle(gpio::CS_L_PORT,CS_L_PIN);
+	gpio.set(gpio::CS_L_PORT,CS_L_PIN);
 }
 
 void comRight(char i)
 {
 	gpio::GPIO& gpio = gpio::GPIO::StaticClass();
-	gpio.toggle(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.clear(gpio::CS_R_PORT,CS_R_PIN);
 	//iterates through bits of i and sets them to data pins
 	if (i & 0x01)
 	{
@@ -353,7 +353,7 @@ void comRight(char i)
 	gpio.set(gpio::EN_PORT,EN_PIN);
 	delay(2); //needs a delay function
 	gpio.clear(gpio::EN_PORT,EN_PIN);
-	gpio.toggle(gpio::CS_R_PORT,CS_R_PIN);
+	gpio.set(gpio::CS_R_PORT,CS_R_PIN);
 }
 
 void bothSides(char i)
@@ -380,6 +380,9 @@ void LCDchar(char chr)
 
 void LCDwrite(char* str)
 {
+
+
+
 	int i=0;
 	while(str[i] != '\0')
 	{
