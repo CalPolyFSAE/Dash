@@ -1,0 +1,21 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}/build/",
+                "env": {
+                    "ARMGCC_DIR": "${workspaceRoot}/../gcc-arm-none-eabi"
+                }
+            },
+            "command": "cmake .. -DCMAKE_TOOLCHAIN_FILE=../arm_gcc_mke18f512.cmake",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}

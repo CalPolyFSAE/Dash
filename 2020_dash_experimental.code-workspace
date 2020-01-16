@@ -10,7 +10,11 @@
 		},
 		"cortex-debug.JLinkGDBServerPath": "C:/Program Files (x86)/SEGGER/JLink/JLinkGDBServerCL.exe",
 		"C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
-		"editor.tabSize": 4
+		"editor.tabSize": 4,
+		"files.associations": {
+			"errno.h": "c",
+			"freertos.h": "c"
+		}
 	},
 	"extensions": {
 		"recommendations": [
