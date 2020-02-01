@@ -13,7 +13,8 @@
 		"editor.tabSize": 4,
 		"files.associations": {
 			"errno.h": "c",
-			"freertos.h": "c"
+			"freertos.h": "c",
+			"memory": "cpp"
 		}
 	},
 	"extensions": {

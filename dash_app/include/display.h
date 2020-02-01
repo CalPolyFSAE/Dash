@@ -20,7 +20,7 @@
 
 class Display {
 public:
-    Display();
+    Display(uint32_t rows, uint32_t cols);
     ~Display();
 
     /**

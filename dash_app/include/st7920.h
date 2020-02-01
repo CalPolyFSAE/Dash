@@ -152,14 +152,6 @@ private:
     }
 
     /**
-     * @brief Set GRAM address
-     * 
-     * @param y y pixel (vertical address)
-     * @param col column
-     */
-    void setGRAMWritePosition(uint8_t y, uint8_t col);
-
-    /**
      * @brief send command over SPI and wait delay microseconds
      * 
      * @param cmd 

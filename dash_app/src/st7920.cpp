@@ -63,16 +63,6 @@ void ST7920::clearGRAM() {
     gramAddress(0x00);
 }
 
-void ST7920::setGRAMWritePosition(uint8_t y, uint8_t col) {
-    if(y < 32) {
-        gramAddress(y);
-        gramAddress(0x00 + col);
-    } else {
-        gramAddress((y-32));
-        gramAddress(0x08 + col);
-    }
-}
-
 void ST7920::command(uint8_t cmd, const uint32_t delay) {
     spi::SPIManager& spimanager = spi::SPIManager::getInstance();
     uint8_t tx[3];
