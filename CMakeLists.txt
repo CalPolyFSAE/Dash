@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.15)
 
 project(2020_dash_experimental C CXX ASM)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 set(MAIN_TARGET ${PROJECT_NAME}.elf)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
