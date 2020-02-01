@@ -9,7 +9,6 @@
 #include <stdint.h>
 
 #include <string>
-#include <vector>
 
 class ST7920 {
 public:
@@ -61,6 +60,14 @@ public:
     static constexpr uint32_t VRAMLength    = Width * Height / sizeof(uint8_t);
 
     /**
+     * @brief configure and reset display
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool initDisplay();
+
+    /**
      * @brief Write a string into DDRAM to display on screen
      * 
      * @param line line number can be [1,4]
@@ -69,12 +76,12 @@ public:
     void displayString(uint8_t line, const std::string& str);
 
     /**
-     * @brief Update the ST7920 graphic ram with VRAM data
+     * @brief Write the ST7920 GRAM data starting at upper left of screen
      */
-    void updateGRAM();
+    void writeGRAM(const uint8_t* data, uint32_t len);
 
     /**
-     * @brief Write all zeros to ST7920 GRAM
+     * @brief Write all zeros to GRAM
      */
     void clearGRAM();
 
@@ -85,11 +92,6 @@ public:
         extendedCommandMode(false);
         command(BasicClearCommand);
     }
-
-    /**
-     * @brief Write all zeros to VRAM
-     */
-    void clearVRAM();
 
     /**
      * @brief Enable or disable LCD display
@@ -111,16 +113,7 @@ public:
         command(FunctionSetCommand | (enabled ? ExtendedFunctionSetGMask : 0));
     }
 
-    /**
-     * @brief get pointer to start of VRAM
-     * 
-     * @return uint8_t* 
-     */
-    uint8_t* getVRAM() {return vram.data();}
-
 private:
-    std::vector<uint8_t> vram;
-
     bool extendedMode = false;
 
     const uint32_t CommandDelay;
@@ -152,18 +145,19 @@ private:
      * @param enabled true to enable
      */
     inline void extendedCommandMode(bool enabled) {
-        if(extendedMode != enabled)
+        if(extendedMode != enabled) {
             command(FunctionSetCommand | (enabled ? FunctionSetREMask : 0));
+            extendedMode = enabled;
+        }
     }
 
     /**
-     * @brief Write a byte into GRAM
+     * @brief Set GRAM address
      * 
-     * @param x x pixel
+     * @param y y pixel (vertical address)
      * @param col column
-     * @param byte 
      */
-    void setGRAMAddrForLocation(uint8_t y, uint8_t col);
+    void setGRAMWritePosition(uint8_t y, uint8_t col);
 
     /**
      * @brief send command over SPI and wait delay microseconds

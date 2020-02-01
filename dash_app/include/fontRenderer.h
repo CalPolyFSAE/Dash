@@ -10,12 +10,13 @@
 #define DASH_FONT_RENDERER_H
 
 #include <string>
+#include <vector>
 
 #include <stdint.h>
 
 class FontRenderer {
 public:
-    FontRenderer(uint8_t* vram_ptr, uint32_t width, uint32_t height);
+    FontRenderer(uint32_t width, uint32_t height);
     ~FontRenderer();
 
     /**
@@ -27,7 +28,7 @@ public:
      * @param trim enable trimming of extra blank space around character
      * @return uint8_t character width
      */
-    uint8_t drawFontAt(uint8_t x, uint8_t y, char c, bool trim);
+    uint8_t drawCharAt(uint8_t x, uint8_t y, char c, bool trim);
 
     /**
      * @brief 
@@ -39,11 +40,11 @@ public:
      * @param trim enable trimming of extra space in front of and behind character
      * @param wrap_w wrap line after width, 0 to disable 
      */
-    void drawFontStringAt(uint8_t x, uint8_t y, const std::string& str, uint32_t spacing, bool trim, uint8_t wrap_w = 0);
+    void drawStringAt(uint8_t x, uint8_t y, const std::string& str, uint32_t spacing, bool trim = true, uint8_t wrap_w = 0);
 
 private:
-    const uint32_t Width, Height;
-    uint8_t vram[];
+    uint32_t Width{}, Height{};
+    std::vector<uint8_t> framebuffer{};
 };
 
 #endif // DASH_FONT_RENDERER_H

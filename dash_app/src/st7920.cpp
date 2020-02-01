@@ -10,7 +10,7 @@
 using namespace bsp;
 
 ST7920::ST7920(uint32_t lpspi_ind, uint32_t command_delay) : 
-    vram(VRAMLength), CommandDelay{command_delay}, LPSPI_Ind{lpspi_ind} {
+    CommandDelay{command_delay}, LPSPI_Ind{lpspi_ind} {
 
 }
 
@@ -18,25 +18,52 @@ ST7920::~ST7920() {
 
 }
 
-
-void ST7920::displayString(uint8_t line, const std::string& str) {
+bool ST7920::initDisplay() {
 
 }
 
-void ST7920::updateGRAM() {
+void ST7920::displayString(uint8_t line, const std::string& str) {
+    for(uint32_t i = 0; i < str.length(); i++) {
+        write(str.data()[i]);
+    }
+}
 
+void ST7920::writeGRAM(const uint8_t* data, uint32_t len) {
+    uint32_t count = 0;
+    for(uint8_t y = 0; y < 64 && count < len; y++) {
+        if(y < 32) {
+            gramAddress(y);
+            gramAddress(0x00);
+        } else {
+            gramAddress((y-32));
+            gramAddress(0x08);
+        }
+        for(uint8_t x = 0; x < 16 && count < len; x++, count++) {
+            write(data[count]);
+        }
+    }
+    gramAddress(0x00);
+    gramAddress(0x00);
 }
 
 void ST7920::clearGRAM() {
-
+    for(uint8_t y = 0; y < 64; y++) {
+        if(y < 32) {
+            gramAddress(y);
+            gramAddress(0x00);
+        } else {
+            gramAddress((y-32));
+            gramAddress(0x08);
+        }
+        for(uint8_t x = 0; x < 16; x++) {
+            write(0x00);
+        }
+    }
+    gramAddress(0x00);
+    gramAddress(0x00);
 }
 
-void ST7920::clearVRAM() {
-    for(auto& c : vram)
-        c = 0;
-}
-
-void ST7920::setGRAMAddrForLocation(uint8_t y, uint8_t col) {
+void ST7920::setGRAMWritePosition(uint8_t y, uint8_t col) {
     if(y < 32) {
         gramAddress(y);
         gramAddress(0x00 + col);
