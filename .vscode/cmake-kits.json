@@ -1,0 +1,12 @@
+[
+    {
+        "name": "arm-none-eabi",
+        "toolchainFile": "arm_gcc_mke18f512.cmake",
+        "preferredGenerator": {
+            "name": "MinGW Makefiles"
+        },
+        "environmentVariables": {
+            "PATH": "${ENV:PATH};C:\\MinGW\\bin"
+        }
+    }
+]
