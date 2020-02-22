@@ -48,6 +48,8 @@ BOARD_InitPins:
   - {pin_num: '44', peripheral: GPIOD, signal: 'GPIO, 4', pin_signal: ADC1_SE6/ACMP1_IN6/PTD4/FTM0_FLT3/FTM3_FLT3}
   - {pin_num: '26', peripheral: GPIOC, signal: 'GPIO, 0', pin_signal: ADC0_SE8/ACMP1_IN4/PTC0/FTM0_CH0/FTM1_CH6}
   - {pin_num: '25', peripheral: GPIOC, signal: 'GPIO, 1', pin_signal: ADC0_SE9/ACMP1_IN3/PTC1/FTM0_CH1/FTM1_CH7}
+  - {pin_num: '21', peripheral: CAN0, signal: RX, pin_signal: ADC0_SE10/ACMP0_IN5/XTAL32/PTC2/FTM0_CH2/CAN0_RX}
+  - {pin_num: '20', peripheral: CAN0, signal: TX, pin_signal: ADC0_SE11/ACMP0_IN4/EXTAL32/PTC3/FTM0_CH3/CAN0_TX}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -69,17 +71,23 @@ void BOARD_InitPins(void)
     /* Clock Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortE);
 
-    /* PORTA7 (pin 37) is configured as PTA7 */
-    PORT_SetPinMux(PORTA, 7U, kPORT_MuxAsGpio);
-
     PORT_SetPinMux(PORTC, 17U, kPORT_MuxAsGpio);//Decimal Point
 
+
+    /* PORTA7 (pin 37) is configured as PTA7 */
+    PORT_SetPinMux(PORTA, 7U, kPORT_MuxAsGpio);
 
     /* PORTC0 (pin 26) is configured as PTC0 */
     PORT_SetPinMux(PORTC, 0U, kPORT_MuxAsGpio);
 
     /* PORTC1 (pin 25) is configured as PTC1 */
     PORT_SetPinMux(PORTC, 1U, kPORT_MuxAsGpio);
+
+    /* PORTC2 (pin 21) is configured as CAN0_RX */
+    PORT_SetPinMux(PORTC, 2U, kPORT_MuxAlt3);
+
+    /* PORTC3 (pin 20) is configured as CAN0_TX */
+    PORT_SetPinMux(PORTC, 3U, kPORT_MuxAlt3);
 
     /* PORTC8 (pin 36) is configured as PTC8 */
     PORT_SetPinMux(PORTC, 8U, kPORT_MuxAsGpio);
