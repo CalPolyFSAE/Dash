@@ -28,35 +28,48 @@ extern "C" {
     int flag3 = 0;
     int flag4 = 0;
 
-    
+
+
+
 
     if(!(time % 3000) && flag1 == 0)
     {
         gpio::GPIO::set(gpio::PortD, 0); // LED
+        gpio::GPIO::set(gpio::PortA, 7); // SSEG
+        gpio::GPIO::set(gpio::PortC, 8); // SSEG        
+    
         flag1 = 1;
     }
 
     if(!(time % 6000) && flag2 == 0)
     {
         gpio::GPIO::set(gpio::PortD, 1); // LED
+        gpio::GPIO::set(gpio::PortD, 3); // SSEG
+        gpio::GPIO::set(gpio::PortD, 4); // SSEG
         flag2 = 1;
     }
 
     if(!(time % 9000) && flag3 == 0)
     {
         gpio::GPIO::set(gpio::PortE, 10); // LED
+        gpio::GPIO::set(gpio::PortC, 9); // SSEG
+        gpio::GPIO::set(gpio::PortC, 0); // SSEG
         flag3 = 1;
     }
 
     if(!(time % 12000) && flag4 == 0)
     {
         gpio::GPIO::set(gpio::PortE, 11); // LED
+        gpio::GPIO::set(gpio::PortC, 1); // SSEG        
+
         flag4 = 1;
     }
 
    if(!(time % 15000))
     {
         gpio::GPIO::clear(gpio::PortE, 11); // LED
+        gpio::GPIO::set(gpio::PortC, 17); // SSEG        
+
     }
 
     if(!(time % 18000))
