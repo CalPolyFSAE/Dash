@@ -150,7 +150,7 @@ int main(void) {
 	cx.callback = cb;
 	can.init(0, &cx);
 
-    // SysTick_Config(60000);
+    SysTick_Config(60000);
     
     while (1);
     return 0;
@@ -162,7 +162,7 @@ extern "C" {
     
     void SysTick_Handler(void){
    
-        // testingLEDS();
+        testingLEDS();
         // cb();
 
     }

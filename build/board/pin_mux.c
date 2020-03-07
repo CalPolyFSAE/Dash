@@ -73,17 +73,7 @@ void BOARD_InitPins(void)
 
     PORT_SetPinMux(PORTC, 17U, kPORT_MuxAsGpio);//Decimal Point
 
-   /* PORTB0 (pin 34) is configured as PTB0 */
-    PORT_SetPinMux(PORTB, 0U, kPORT_MuxAsGpio);
 
-    /* PORTB1 (pin 33) is configured as PTB1 */
-    PORT_SetPinMux(PORTB, 1U, kPORT_MuxAsGpio);
-
-    /* PORTB2 (pin 32) is configured as PTB2 */
-    PORT_SetPinMux(PORTB, 2U, kPORT_MuxAsGpio);
-
-    /* PORTB3 (pin 31) is configured as PTB3 */
-    PORT_SetPinMux(PORTB, 3U, kPORT_MuxAsGpio);
     /* PORTA7 (pin 37) is configured as PTA7 */
 
     
