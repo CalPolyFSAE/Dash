@@ -15,7 +15,7 @@ uint8_t counter;
 
 void cb(void){
 	can::CANlight::frame f = can::CANlight::StaticClass().readrx(0);
-    if (f.id == 0x123)
+    if (f.id == 0x123) //Testing all LEDS AND SSSEG
     {
         if(f.data[0] == 0x00)
         {
